@@ -1,7 +1,7 @@
 package main
 
 
-import "./awsHandler"
+import "cleeper/awsHandler"
 
 import (
         "context"

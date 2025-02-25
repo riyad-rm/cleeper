@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "cleeper_lambda_logs" {
 resource "aws_iam_policy" "cleeper_lambda_permissions" {
   name        = "cleeper_lambda_permissions"
   path        = "/"
-  description = "IAM policy for granting permissions to cleeper lambda"
+  description = "IAM policy granting permissions to cleeper lambda"
 
   policy = <<EOF
 {

@@ -12,7 +12,7 @@ resource "aws_lambda_function" "cleeper_lambda" {
 
   timeout = 600
 
-  runtime = "go1.x"
+  runtime = "provided.al2"
 
   environment {
     variables = {

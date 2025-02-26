@@ -10,7 +10,7 @@ type LambdaTrigger struct {
         Regions string `json:"regions"`
         TagKeys string `json:"tagKeys"`
         TagValues string `json:"tagValues"`
-        TaggedOnly bool `json:"taggedOnly"`
+        TaggedOnly string `json:"taggedOnly"` // using string instead of bool because if no value is provided by the user this will be set to false
 }
 
 type Config struct {

@@ -34,24 +34,23 @@ func listAllEC2Instances(){
 }
 
 func evaluateEC2(instance *ec2.Instance, tag_keys *[]string, tag_values *[]string, tagged_only bool) bool{
-	// reject instances that are part of an ASG
-	// reject instances that have the tag
 	haveTag := false
 	for _, tag :=range instance.Tags {
+		// reject instances that are part of an ASG as they will be terminated
 		if *tag.Key == "aws:autoscaling:groupName" {
 			return false
 		}
 		if stringInList(tag_keys, *tag.Key){
 			if stringInList(tag_values, *tag.Value){
 				haveTag = true
+				// do not return here to make sure we have seen all tags and none of them is aws:autoscaling:groupName
 			}
 		}
 	}
-	fmt.Println("not Have tag: ", !haveTag)
-	if haveTag && tagged_only{
+	if !tagged_only {
+		// If we don't care about the tag, we accept all instances
 		return true
 	}
-	haveTag = !haveTag
 	return haveTag
 }
 

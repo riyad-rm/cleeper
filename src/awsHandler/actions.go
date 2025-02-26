@@ -177,7 +177,7 @@ func ListRegion(sess *session.Session, tag_keys *[]string, tag_values *[]string,
 func Action(action LambdaTrigger){
 	// load tags config
 	tag_keys := []string{"cleeper"}
-	tag_values := []string{"false"}
+	tag_values := []string{"true"}
 	if action.TagKeys != ""{
 		tag_keys = strings.Split(action.TagKeys, ",")
 	}
@@ -197,10 +197,11 @@ func Action(action LambdaTrigger){
 	} else {
 		regions, _ = ListAllRegions(sess)
 	}
-	tagged_only := false
-	if action.TaggedOnly == true {
-		tagged_only = true
+	tagged_only := true
+	if action.TaggedOnly == "false" {
+		tagged_only = false
 	}
+
 	// walk through the regions
 	for _, region := range regions {
 		fmt.Println("Working on region: ", region)

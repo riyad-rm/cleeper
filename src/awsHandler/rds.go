@@ -13,40 +13,40 @@ import (
 func evaluateRDSInstance(instance *rds.DBInstance, tag_keys *[]string, tag_values *[]string, stop bool, tagged_only bool) bool{
 	// Aurora DB can't be stoped or started
 	if strings.HasPrefix(*instance.Engine, "aurora") {
-		fmt.Println("Skip rds instance with aurora engine")
+		//fmt.Println("Skip rds instance with aurora engine")
 		return false
 	}
 
 	// ignore sql server multi az
 	if strings.HasPrefix(*instance.Engine, "sqlserver") && *instance.MultiAZ == true {
-		fmt.Println("Skip sqlserver engine with multi AZ deployment")
+		//fmt.Println("Skip sqlserver engine with multi AZ deployment")
 		return false
 	}
 
 	// ignore read replicas and replicated DBs
 	if instance.ReadReplicaSourceDBInstanceIdentifier != nil {
-		fmt.Println("Skip replica database ", *instance.DBInstanceIdentifier)
+		//fmt.Println("Skip replica database ", *instance.DBInstanceIdentifier)
 		return false
 	}
 	if len(instance.ReadReplicaDBInstanceIdentifiers) > 0 {
-		fmt.Println("Skip Read replicated database ", *instance.DBInstanceIdentifier)
+		//fmt.Println("Skip Read replicated database ", *instance.DBInstanceIdentifier)
 		return false
 	}
 	// Clusters are handled by antoher function
 	if instance.DBClusterIdentifier != nil {
-		fmt.Println("Skip instance that is part of a cluster")
+		//fmt.Println("Skip instance that is part of a cluster")
 		return false
 	}
 
 	// don't strop stopped instances and don't start available instances
 	if stop {
 		if ! stringInList(&[]string{"available"}, *instance.DBInstanceStatus){
-			fmt.Println("Skip rds instance not available ",*instance.DBInstanceIdentifier)
+			//fmt.Println("Skip rds instance not available ",*instance.DBInstanceIdentifier)
 			return false
 		}
 	} else {
 		if ! stringInList(&[]string{"stopped"}, *instance.DBInstanceStatus){
-				fmt.Println("Skip rds instance not stopped cannot be started ",*instance.DBInstanceIdentifier)
+				//fmt.Println("Skip rds instance not stopped cannot be started ",*instance.DBInstanceIdentifier)
 				return false
 		}
 	}
@@ -61,10 +61,9 @@ func evaluateRDSInstance(instance *rds.DBInstance, tag_keys *[]string, tag_value
 			}
 		}
 	}
-	if haveTag && tagged_only{
+	if !tagged_only{
 	 	return true
 	 }
-	haveTag = !haveTag
 	return haveTag
 }
 
@@ -125,18 +124,18 @@ func startRDSInstances(client *rds.RDS, dbIdentifiers []*string){
 func evaluateRDSCluster(instance *rds.DBCluster, tag_keys *[]string, tag_values *[]string, stop bool, tagged_only bool) bool{
 	//fmt.Println(*instance)
 	if *instance.EngineMode != "provisioned" {
-		fmt.Println("Skip non provisioned cluster")
+		//fmt.Println("Skip non provisioned cluster")
 		return false
 	} 
 	// don't stop stopped instances and don't start available instances
 	if stop {
 		if stringInList(&[]string{"stopped","stopping","deleting"}, *instance.Status){
-			fmt.Println("Skip rds cluster not available ",*instance.DbClusterResourceId)
+			//fmt.Println("Skip rds cluster not available ",*instance.DbClusterResourceId)
 			return false
 		}
 	} else {
 		if ! stringInList(&[]string{"stopped","stopping"}, *instance.Status){
-			fmt.Println("Skip rds cluster not stopped ",*instance.DbClusterResourceId)
+			//fmt.Println("Skip rds cluster not stopped ",*instance.DbClusterResourceId)
 			return false
 		}
 	}
@@ -151,10 +150,9 @@ func evaluateRDSCluster(instance *rds.DBCluster, tag_keys *[]string, tag_values 
 			}
 		}
 	}
-	if haveTag && tagged_only{
+	if !tagged_only{
 	 	return true
 	 }
-	haveTag = !haveTag
 	return haveTag
 }
 

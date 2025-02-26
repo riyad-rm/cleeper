@@ -54,10 +54,9 @@ func evaluateASG(asg *autoscaling.Group, tag_keys *[]string, tag_values *[]strin
 			}
 		}
 	}
-	if haveTag && tagged_only{
+	if !tagged_only{
 	 	return true
 	 }
-	haveTag = !haveTag
 	return haveTag
 }
 

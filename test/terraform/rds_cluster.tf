@@ -2,7 +2,7 @@ resource "aws_rds_cluster" "default" {
   count = var.enable_rds_cluster
   cluster_identifier  = "aurora-cluster-demo"
   engine              = "aurora-mysql"
-  engine_version      = "5.7.mysql_aurora.2.03.2"
+  engine_version      = "5.7.mysql_aurora.2.11.2"
   availability_zones  = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
   database_name       = "mydb"
   master_username     = "foo"

@@ -1,5 +1,5 @@
 resource "aws_db_instance" "default" {
-  count = 0
+  count = var.enable_rds_instance
   allocated_storage    = 10
   engine               = "mysql"
   engine_version       = "5.7"

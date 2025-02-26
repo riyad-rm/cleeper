@@ -12,3 +12,7 @@ variable "tags" {
 variable "enable_rds_cluster"{
   default = 0
 }
+
+variable "enable_rds_instance"{
+  default = 0
+}

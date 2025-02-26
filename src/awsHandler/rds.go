@@ -50,21 +50,18 @@ func evaluateRDSInstance(instance *rds.DBInstance, tag_keys *[]string, tag_value
 				return false
 		}
 	}
-
-	// evaluate tags
-	haveTag := false
-	for _, tag := range instance.TagList {
-		if stringInList(tag_keys, *tag.Key){
-			if stringInList(tag_values, *tag.Value){
-				haveTag = true
-				break
-			}
-		}
-	}
 	if !tagged_only{
 	 	return true
 	 }
-	return haveTag
+	// evaluate tags
+	for _, tag := range instance.TagList {
+		if stringInList(tag_keys, *tag.Key){
+			if stringInList(tag_values, *tag.Value){
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func listFilteredRDSInstances(client *rds.RDS, tag_keys *[]string, tag_values *[]string, tagged_only bool, action bool) []*string{
@@ -139,21 +136,18 @@ func evaluateRDSCluster(instance *rds.DBCluster, tag_keys *[]string, tag_values 
 			return false
 		}
 	}
-
-	// evaluate tags
-	haveTag := false
-	for _, tag := range instance.TagList {
-		if stringInList(tag_keys, *tag.Key){
-			if stringInList(tag_values, *tag.Value){
-				haveTag = true
-				break
-			}
-		}
-	}
 	if !tagged_only{
 	 	return true
 	 }
-	return haveTag
+	// evaluate tags
+	for _, tag := range instance.TagList {
+		if stringInList(tag_keys, *tag.Key){
+			if stringInList(tag_values, *tag.Value){
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func listFilteredRDSClusters(client *rds.RDS, tag_keys *[]string, tag_values *[]string, tagged_only bool, action bool) []*string{

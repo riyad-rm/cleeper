@@ -45,19 +45,17 @@ func evaluateASG(asg *autoscaling.Group, tag_keys *[]string, tag_values *[]strin
 		// no need to resume if not suspended
 		return false
 	}
-	haveTag := false
-	for _, tag :=range asg.Tags {
-		if stringInList(tag_keys, *tag.Key){
-			if stringInList(tag_values, *tag.Value){
-				haveTag = true
-				break
-			}
-		}
-	}
 	if !tagged_only{
 	 	return true
 	 }
-	return haveTag
+	for _, tag :=range asg.Tags {
+		if stringInList(tag_keys, *tag.Key){
+			if stringInList(tag_values, *tag.Value){
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func listASGInstances(asg *autoscaling.Group) []*autoscaling.Instance{
